@@ -1,0 +1,19 @@
+{
+  "hotkeys": [
+    {
+      "key": "c",
+      "modifiers": ["alt"],
+      "application": "Calculator"
+    },
+    {
+      "key": "t",
+      "modifiers": ["cmd", "alt"],
+      "application": "Terminal"
+    },
+    {
+      "key": "m",
+      "modifiers": ["cmd", "ctrl", "shift"],
+      "application": "Mail"
+    }
+  ]
+}
