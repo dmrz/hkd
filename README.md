@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.svg" alt="hkd" width="150">
+</p>
+
 # hkd
 
 A minimal macOS hotkey daemon that launches applications in response to global keyboard shortcuts. Configure your shortcuts in a simple JSON file and run `hkd` in the background. The daemon watches your config for changes and reloads automatically.

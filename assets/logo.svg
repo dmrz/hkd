@@ -1,0 +1,29 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="hkd logo: a keyboard keycap with the four macOS modifier glyphs above the letters hkd">
+  <style>
+    .side  { fill: #d0d7de; }
+    .top   { fill: #f6f8fa; }
+    .edge  { stroke: #afb8c1; }
+    .mods  { fill: #57606a; }
+    .label { fill: #1f2328; }
+    text {
+      font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      .side  { fill: #1b2027; }
+      .top   { fill: #2d333b; }
+      .edge  { stroke: #444c56; }
+      .mods  { fill: #8b949e; }
+      .label { fill: #e6edf3; }
+    }
+  </style>
+
+  <!-- keycap side walls -->
+  <rect class="side edge" x="28" y="30" width="200" height="198" rx="38" stroke-width="2.5"/>
+  <!-- keycap top surface -->
+  <rect class="top edge" x="44" y="44" width="168" height="152" rx="26" stroke-width="2"/>
+
+  <!-- modifier row -->
+  <text class="mods" x="137" y="98" text-anchor="middle" font-size="28" letter-spacing="14">&#8963;&#8997;&#8679;&#8984;</text>
+  <!-- label -->
+  <text class="label" x="128" y="172" text-anchor="middle" font-size="50" font-weight="600" letter-spacing="1">hkd</text>
+</svg>
