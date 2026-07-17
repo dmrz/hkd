@@ -8,19 +8,24 @@ let package = Package(
         .executableTarget(
             name: "hkd",
             path: "Sources/hkd",
-            swiftSettings: [
-                .unsafeFlags(["-Xfrontend", "-link-objc-runtime"])
-            ],
             linkerSettings: [
+                .linkedFramework("Carbon"),
                 .linkedFramework("CoreGraphics"),
                 .linkedFramework("Cocoa"),
+                // Embed Info.plist so macOS can attribute TCC permissions
+                // to a stable bundle identifier.
                 .unsafeFlags([
                     "-Xlinker", "-sectcreate",
                     "-Xlinker", "__TEXT",
                     "-Xlinker", "__info_plist",
-                    "-Xlinker", "Info.plist"
+                    "-Xlinker", "Info.plist",
                 ])
             ]
+        ),
+        .testTarget(
+            name: "hkdTests",
+            dependencies: ["hkd"],
+            path: "Tests/hkdTests"
         )
     ]
 )

@@ -1,26 +1,52 @@
-//
-//  main.swift
-//  hkd
-//
-//  Created by Dima on 19.06.2026.
-//
+import Cocoa
 
-import Foundation
-import CoreGraphics
+let hkdVersion = "0.2.0"
 
-// Check if the arguments contain the version flag
-// TODO: Use swift-argument-parser if more than just a version is needed
-if CommandLine.arguments.contains("--version") || CommandLine.arguments.contains("-v") {
-    print("0.1.0")
-    exit(0) // Exit cleanly so the rest of the app doesn't execute
+let helpText = """
+hkd \(hkdVersion) — a minimal macOS hotkey daemon
+
+USAGE: hkd [options]
+
+OPTIONS:
+  -c, --config <path>   Path to the config file
+                        (default: ~/.config/hkd/config.json)
+  -v, --version         Print the version and exit
+  -h, --help            Show this help and exit
+"""
+
+func fail(_ message: String) -> Never {
+    FileHandle.standardError.write(Data("hkd: \(message)\n".utf8))
+    exit(EXIT_FAILURE)
 }
 
-let daemonName = "hkd"
-let home = FileManager.default.homeDirectoryForCurrentUser
-let configURL = home.appending(components: ".config", daemonName, "config.json")
+var configPathOverride: String?
+var arguments = CommandLine.arguments.dropFirst().makeIterator()
+while let argument = arguments.next() {
+    switch argument {
+    case "-v", "--version":
+        print(hkdVersion)
+        exit(EXIT_SUCCESS)
+    case "-h", "--help":
+        print(helpText)
+        exit(EXIT_SUCCESS)
+    case "-c", "--config":
+        guard let path = arguments.next() else { fail("missing value for \(argument)") }
+        configPathOverride = path
+    default:
+        fail("unknown option \(argument); see hkd --help")
+    }
+}
 
-let daemon = HKDaemon(configURL: configURL)
+let configURL = if let configPathOverride {
+    URL(fileURLWithPath: (configPathOverride as NSString).expandingTildeInPath)
+} else {
+    FileManager.default.homeDirectoryForCurrentUser
+        .appending(components: ".config", "hkd", "config.json")
+}
+
+let daemon = Daemon(configURL: configURL)
 daemon.start()
 
-print("Daemon running. Monitoring keys...")
-CFRunLoopRun()
+// The Cocoa event loop dispatches Carbon hotkey events and services the main
+// run loop (event tap, timers, dispatch sources).
+NSApplication.shared.run()

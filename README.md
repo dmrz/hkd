@@ -5,14 +5,15 @@ A minimal macOS hotkey daemon that launches applications in response to global k
 ## Features
 
 - Global hotkeys (Cmd/Shift/Alt/Ctrl + letters, numbers, arrows, F-keys)
+- **No permissions required** when every hotkey includes a modifier (uses the Carbon hotkey API)
 - Launch apps by bundle identifier or name
 - Auto-reload on config changes
-- Lightweight, no dependencies (Swift + CoreGraphics)
+- Lightweight, no dependencies (Swift + Carbon/CoreGraphics)
 
 ## Requirements
 
 - macOS 13+
-- Accessibility permission (System Settings → Privacy & Security → Accessibility)
+- Accessibility permission — **only** if you declare a hotkey without any modifiers (e.g. a bare `f5`). In that case hkd falls back to a CGEvent tap, which macOS gates behind System Settings → Privacy & Security → Accessibility. As long as every hotkey has at least one modifier, no permission is needed.
 
 ## Install (Homebrew)
 
@@ -27,9 +28,6 @@ brew install dmrz/hkd/hkd
 brew services start hkd
 ```
 
-> [!NOTE]
-> On first launch, grant Accessibility permission in System Settings → Privacy & Security → Accessibility.
-
 ### Setup config
 
 ```sh
@@ -39,7 +37,7 @@ cp "$(brew --prefix hkd)/share/hkd/config-example.json" ~/.config/hkd/config.jso
 
 ## Configure
 
-Create or edit ~/.config/hkd/config.json.
+Create or edit `~/.config/hkd/config.json`.
 
 Example:
 
@@ -55,10 +53,22 @@ Example:
 
 Notes:
 
-- Modifiers: cmd, shift, alt/option, ctrl/control
-- Application: bundle ID (e.g. com.apple.Terminal) or app name (e.g. Safari)
-- Keys: letters, numbers, space, return, tab, escape, arrows, f1–f12
-- Config auto-reloads on save
+- Modifiers: `cmd`/`command`, `shift`, `alt`/`opt`/`option`, `ctrl`/`control`
+- Application: bundle ID (e.g. `com.apple.Terminal`) or app name (e.g. `Safari`)
+- Keys: letters, numbers, `space`, `return`/`enter`, `tab`, `escape`/`esc`, `delete`/`backspace`, arrows (`left`, `right`, `up`, `down`), `f1`–`f12`
+- Config auto-reloads on save; invalid configs are rejected with an error and the previous hotkeys stay active
+
+## Usage
+
+```
+hkd [options]
+
+OPTIONS:
+  -c, --config <path>   Path to the config file
+                        (default: ~/.config/hkd/config.json)
+  -v, --version         Print the version and exit
+  -h, --help            Show this help and exit
+```
 
 ## Build from source
 
@@ -73,4 +83,12 @@ xcode-select --install  # if not already installed
 ```sh
 swift build -c release --disable-sandbox
 codesign -fs - .build/release/hkd
+```
+
+### Test
+
+Tests require a full Xcode toolchain (the Command Line Tools alone don't ship the Testing framework):
+
+```sh
+swift test
 ```
