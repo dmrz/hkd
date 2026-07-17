@@ -8,6 +8,7 @@ A minimal macOS hotkey daemon that launches applications in response to global k
 - **No permissions required** when every hotkey includes a modifier (uses the Carbon hotkey API)
 - Launch apps by bundle identifier or name
 - Auto-reload on config changes
+- Self-restarts after `brew upgrade` (exits when its binary is replaced, letting launchd relaunch the new version)
 - Lightweight, no dependencies (Swift + Carbon/CoreGraphics)
 
 ## Requirements

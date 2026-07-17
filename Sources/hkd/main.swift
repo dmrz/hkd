@@ -1,6 +1,6 @@
 import Cocoa
 
-let hkdVersion = "0.2.1"
+let hkdVersion = "0.2.2"
 
 let helpText = """
 hkd \(hkdVersion) — a minimal macOS hotkey daemon
@@ -50,6 +50,10 @@ let configURL = if let configPathOverride {
 
 let daemon = Daemon(configURL: configURL)
 daemon.start()
+
+// Self-restart on upgrade: exit when our binary is replaced (e.g. by
+// `brew upgrade`) and let launchd's keep_alive bring up the new version.
+let executableWatcher = ExecutableWatcher()
 
 // The Cocoa event loop dispatches Carbon hotkey events and services the main
 // run loop (event tap, timers, dispatch sources).
