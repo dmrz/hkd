@@ -66,6 +66,8 @@ hkd [options]
 OPTIONS:
   -c, --config <path>   Path to the config file
                         (default: ~/.config/hkd/config.json)
+      --verbose         Also log every hotkey match (useful when
+                        setting up or debugging a config)
   -v, --version         Print the version and exit
   -h, --help            Show this help and exit
 ```

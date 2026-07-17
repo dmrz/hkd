@@ -1,6 +1,6 @@
 import Cocoa
 
-let hkdVersion = "0.2.0"
+let hkdVersion = "0.2.1"
 
 let helpText = """
 hkd \(hkdVersion) — a minimal macOS hotkey daemon
@@ -10,6 +10,8 @@ USAGE: hkd [options]
 OPTIONS:
   -c, --config <path>   Path to the config file
                         (default: ~/.config/hkd/config.json)
+      --verbose         Also log every hotkey match (useful when
+                        setting up or debugging a config)
   -v, --version         Print the version and exit
   -h, --help            Show this help and exit
 """
@@ -32,6 +34,8 @@ while let argument = arguments.next() {
     case "-c", "--config":
         guard let path = arguments.next() else { fail("missing value for \(argument)") }
         configPathOverride = path
+    case "--verbose":
+        Log.isVerbose = true
     default:
         fail("unknown option \(argument); see hkd --help")
     }

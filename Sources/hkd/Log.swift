@@ -1,7 +1,16 @@
 import Foundation
 
 /// Minimal timestamped logging: info to stdout, warnings and errors to stderr.
+/// Debug messages are only emitted when `--verbose` is set.
 enum Log {
+    /// Set once during argument parsing, before any concurrent code runs.
+    nonisolated(unsafe) static var isVerbose = false
+
+    static func debug(_ message: String) {
+        guard isVerbose else { return }
+        write(message, to: .standardOutput)
+    }
+
     static func info(_ message: String) {
         write(message, to: .standardOutput)
     }

@@ -86,7 +86,7 @@ final class Daemon {
 
     private func makeBackend(_ kind: HotkeyBackendKind) -> any HotkeyBackend {
         let onTrigger: @MainActor (Binding) -> Void = { [launcher] binding in
-            Log.info("\(binding.name) → \(binding.application)")
+            Log.debug("\(binding.name) → \(binding.application)")
             launcher.launch(binding.application)
         }
         switch kind {
